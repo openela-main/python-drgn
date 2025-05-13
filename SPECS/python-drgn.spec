@@ -14,8 +14,8 @@ drgn exposes the types and variables in a program for easy, expressive
 scripting in Python.}
 
 Name:           python-%{pypi_name}
-Version:        0.0.24
-Release:        4%{?dist}
+Version:        0.0.29
+Release:        1%{?dist}
 Summary:        Programmable debugger
 
 License:        LGPL-2.1-or-later
@@ -107,6 +107,7 @@ cp -PR contrib tools %{buildroot}%{_datadir}/drgn
 %{python3_sitearch}/_%{pypi_name}.pyi
 %{python3_sitearch}/_%{pypi_name}.cpython*.so
 %{python3_sitearch}/%{pypi_name}
+%{python3_sitearch}/_%{pypi_name}_util
 %{python3_sitearch}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
 
 %if %{with docs}
@@ -117,6 +118,10 @@ cp -PR contrib tools %{buildroot}%{_datadir}/drgn
 %endif
 
 %changelog
+* Mon Nov 11 2024 Philipp Rudo <prudo@redhat.com> - 0.0.29-1
+- Rebase to upstream v0.0.29
+  Resolves: RHEL-61658
+
 * Thu Aug 8 2024 Tao Liu <ltao@redhat.com> - 0.0.24-4
 - Enable brew-build.tier0.functional test
 
