@@ -14,8 +14,8 @@ drgn exposes the types and variables in a program for easy, expressive
 scripting in Python.}
 
 Name:           python-%{pypi_name}
-Version:        0.0.29
-Release:        1%{?dist}
+Version:        0.0.31
+Release:        4%{?dist}
 Summary:        Programmable debugger
 
 License:        LGPL-2.1-or-later
@@ -24,10 +24,11 @@ Source0:        %{pypi_source}
 
 BuildRequires:  python3-devel
 BuildRequires:  python3dist(setuptools)
+BuildRequires:  python3dist(sphinx)
 %if %{with docs}
 BuildRequires:  sed
-BuildRequires:  python3dist(sphinx)
 BuildRequires:  python3-docs
+BuildRequires:  graphviz
 %endif
 %if %{with tests}
 BuildRequires:  python3dist(pytest)
@@ -36,6 +37,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  bzip2-devel
 BuildRequires:  elfutils-devel
+BuildRequires:  elfutils-debuginfod-client-devel
 BuildRequires:  libkdumpfile-devel
 BuildRequires:  zlib-devel
 BuildRequires:  xz-devel
@@ -48,6 +50,7 @@ BuildRequires:  libtool
 
 %package -n     %{pypi_name}
 Summary:        %{summary}
+Recommends:     elfutils-debuginfod-client
 
 %description -n %{pypi_name} %{_description}
 
@@ -80,6 +83,7 @@ fi
 %build
 # verbose build
 V=1 %py3_build
+PYTHONPATH=${PWD} sphinx-build-3 -b man docs man docs/man/*
 
 %if %{with docs}
 # generate html docs
@@ -92,6 +96,8 @@ rm -rf html/.{doctrees,buildinfo}
 %py3_install
 mkdir -p %{buildroot}%{_datadir}/drgn
 cp -PR contrib tools %{buildroot}%{_datadir}/drgn
+mkdir -p %{buildroot}%{_mandir}/man1
+cp -PR man/drgn.1* %{buildroot}%{_mandir}/man1
 
 %if %{with tests}
 %check
@@ -104,6 +110,7 @@ cp -PR contrib tools %{buildroot}%{_datadir}/drgn
 %doc README.rst
 %{_bindir}/drgn
 %{_datadir}/drgn
+%{_mandir}/man1/drgn.1*
 %{python3_sitearch}/_%{pypi_name}.pyi
 %{python3_sitearch}/_%{pypi_name}.cpython*.so
 %{python3_sitearch}/%{pypi_name}
@@ -118,6 +125,21 @@ cp -PR contrib tools %{buildroot}%{_datadir}/drgn
 %endif
 
 %changelog
+* Wed Jul 16 2025 Philipp Rudo <prudo@redhat.com> - 0.0.31-4
+- Fix regression in selftest introduced in 0.0.31-3
+
+* Thu Jul 3 2025 Philipp Rudo <prudo@redhat.com> - 0.0.31-3
+- Add man page for drgn
+  Resolves: RHEL-97801
+
+* Wed May 28 2025 Philipp Rudo <prudo@redhat.com> - 0.0.31-2
+- Rebuild for libkdumpfile 0.5.5
+  Resolves: RHEL-86263
+
+* Fri May 16 2025 Philipp Rudo <prudo@redhat.com> - 0.0.31-1
+- Rebase to upstream v0.0.31
+  Resolves: RHEL-86265
+
 * Mon Nov 11 2024 Philipp Rudo <prudo@redhat.com> - 0.0.29-1
 - Rebase to upstream v0.0.29
   Resolves: RHEL-61657
