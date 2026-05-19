@@ -14,8 +14,8 @@ drgn exposes the types and variables in a program for easy, expressive
 scripting in Python.}
 
 Name:           python-%{pypi_name}
-Version:        0.0.31
-Release:        4%{?dist}
+Version:        0.0.33
+Release:        2%{?dist}
 Summary:        Programmable debugger
 
 License:        LGPL-2.1-or-later
@@ -45,6 +45,8 @@ BuildRequires:  xz-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
+
+Patch001: 0001-libdrgn-orc_info-work-around-ORC-backports-in-RHEL-9.patch
 
 %description %{_description}
 
@@ -125,6 +127,14 @@ cp -PR man/drgn.1* %{buildroot}%{_mandir}/man1
 %endif
 
 %changelog
+* Wed Dec 17 2025 Philipp Rudo <prudo@redhat.com> - 0.0.33-2
+- Work around ORC backports in RHEL 9.6
+  Resolves: RHEL-136527
+
+* Thu Nov 13 2025 Philipp Rudo <prudo@redhat.com> - 0.0.33-1
+- Rebase to upstream v0.0.33
+  Resolves: RHEL-114118
+
 * Wed Jul 16 2025 Philipp Rudo <prudo@redhat.com> - 0.0.31-4
 - Fix regression in selftest introduced in 0.0.31-3
 
